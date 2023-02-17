@@ -1,134 +1,73 @@
-/**
-	@file Contiene el controlador de la aplicacion
-	@author Sergio Rivera
-	@license GPL-3.0-or-later
-**/
-import {VistaModificar} from '../vistas/vistamodificar.js'
-import {VistaInicio} from '../vistas/vistainicio.js'
-import {VistaAlta} from '../vistas/vistaalta.js'
-import {VistaConsulta} from '../vistas/vistaconsulta.js'
-import {Modelo} from '../modelos/modelo.js';
-
-class Controlador{
-    constructor(){
-        window.onload = this.iniciar.bind(this)
+import { VistaModificar } from '../vistas/vistamodificar.js';
+import { VistaInicio } from '../vistas/vistainicio.js';
+import { VistaAlta } from '../vistas/vistaalta.js';
+import { VistaConsulta } from '../vistas/vistaconsulta.js';
+import { Modelo } from '../modelos/modelo.js';
+export class Controlador {
+    constructor() {
+        window.onload = this.iniciar.bind(this);
     }
-    /**
-     * Inicia el modelo y las vistas
-     */
-    iniciar(){
-         
-        //Primero creamos el modelo porque tarda en crear
-         this.modelo = new Modelo()
-
-        this.divVistaInicio = document.getElementById('vistaInicio')
-        this.divVistaAlta = document.getElementById('vistaAlta')
-        this.divVistaConsulta= document.getElementById('vistaConsulta')
-        this.divVistaModificar = document.getElementById('vistaModificar')
-
+    iniciar() {
+        this.modelo = new Modelo();
+        this.divVistaInicio = document.getElementById('vistaInicio');
+        this.divVistaAlta = document.getElementById('vistaAlta');
+        this.divVistaConsulta = document.getElementById('vistaConsulta');
+        this.divVistaModificar = document.getElementById('vistaModificar');
         this.vistaInicio = new VistaInicio(this.divVistaInicio, this);
-        this.vistaAlta = new VistaAlta(this.divVistaAlta, this)
-        this.vistaConsulta = new VistaConsulta(this.divVistaConsulta, this)
-        this.vistaModificar = new VistaModificar(this.divVistaModificar, this)
-        this.ocultarVistas()
-        this.vistaInicio.mostrar(true)
-    }
-    /**
-     * Oculta las vistas de la aplicacion
-     */
-    ocultarVistas(){
-        this.vistaInicio.mostrar(false)
-        this.vistaAlta.mostrar(false)
-        this.vistaModificar.mostrar(false)
-        this.vistaConsulta.mostrar(false)
-       
-    }
-    /**
-     * Metodo para cancelar cualquier proceso y volver a la vista inicio
-     */
-    cancelar(){
-        this.ocultarVistas()
-        this.vistaInicio.mostrar(true)
-    }
-    /**
-     * Oculta las vistas y muestra la vista de consultas de un dato en concreto
-     */
-    pulsarConsulta(dato){
+        this.vistaAlta = new VistaAlta(this.divVistaAlta, this);
+        this.vistaConsulta = new VistaConsulta(this.divVistaConsulta, this);
+        this.vistaModificar = new VistaModificar(this.divVistaModificar, this);
         this.ocultarVistas();
-        this.vistaConsulta.mostrar(true)
-        this.vistaConsulta.pintar(dato)
-      
-      
+        this.vistaInicio.mostrar(true);
     }
-     /**  
-     * metodo que llama al modelo para editar los datos que se encuentran en el
-    */
-     aceptarModificar(id, nombre, precio, fecha, descripcion, edad, tematicas, estado, file){
-       this.ocultarVistas()
-       this.vistaInicio.mostrar(true)
-       
-        this.modelo.editar(id, nombre, precio, fecha, descripcion, edad, tematicas, estado, file)
-        alert("Introducido con exito")      
+    ocultarVistas() {
+        this.vistaInicio.mostrar(false);
+        this.vistaAlta.mostrar(false);
+        this.vistaModificar.mostrar(false);
+        this.vistaConsulta.mostrar(false);
     }
-    /**
-     * Metodo encargdo de mostrar la vista del alta
-     */
-    pulsarAlta(){
+    cancelar() {
         this.ocultarVistas();
-        this.vistaAlta.mostrar(true)
+        this.vistaInicio.mostrar(true);
     }
-    pulsarInicio(){
+    pulsarConsulta(dato) {
         this.ocultarVistas();
-        this.vistaInicio.mostrar(true)
+        this.vistaConsulta.mostrar(true);
+        this.vistaConsulta.pintar(dato);
     }
-    /**
-     * Metodo para hacer un alta en indexdb de videojuegos
-     * @param {string} nombre Titulo del juego
-     * @param {number} precio Precio del juego
-     * @param {date} fecha Fecha de estreno del juego
-     * @param {string} descripcion Descripcion del juego
-     * @param {string} edad Edad recomendada para jugar
-     * @param {string[]}tematicas Tematicas relacionadas con el juego
-     * @param {boolean} estado Definirá si el juego esta terminado o no
-     * @param {object} file Imagen relacionada del juego
-     */
-    aceptarAlta(nombre,precio,fecha,descripcion,edad,tematicas,estado,file){
-        this.ocultarVistas()
-        this.modelo.insertar(nombre, precio, fecha, descripcion, edad,tematicas,estado,file) 
-        this.vistaInicio.mostrar(true)
-             
-    }
-    /**
-     * Metodo para eliminar un videojuego
-     * @param {number} id 
-     */
-    eliminarVideojuego(id){
-        this.modelo.borrar(id)
-    }
-    /**
-     * Metodo para buscar un registro por nombre
-     * @param {string} nombre 
-     */
-    pulsarBusqueda(nombre){
-        this.modelo.obtenerRegistro2(nombre)
-    }
-    /**
-     * Metodo para llamar a la vista de modificar
-     * @param {object} dato 
-     */
-    pulsarModificar(dato){
+    aceptarModificar(id, nombre, precio, fecha, descripcion, edad, tematicas, estado, file) {
         this.ocultarVistas();
-        this.vistaModificar.mostrar(true)
-        this.vistaModificar.rellenar(dato)
-        
+        this.vistaInicio.mostrar(true);
+        this.modelo.editar(id, nombre, precio, fecha, descripcion, edad, tematicas, estado, file);
+        alert('Introducido con exito');
     }
-    /**
-     * Metodo para obtener datos
-     * @returns devuelve los registros de un videojuego
-     */
-    getModelo(){
-        return this.modelo
+    pulsarAlta() {
+        this.ocultarVistas();
+        this.vistaAlta.mostrar(true);
     }
-    
+    pulsarInicio() {
+        this.ocultarVistas();
+        this.vistaInicio.mostrar(true);
+    }
+    aceptarAlta(nombre, precio, fecha, descripcion, edad, tematicas, estado, file) {
+        this.ocultarVistas();
+        this.modelo.insertar(nombre, precio, fecha, descripcion, edad, tematicas, estado, file);
+        this.vistaInicio.mostrar(true);
+    }
+    eliminarVideojuego(id) {
+        this.modelo.borrar(id);
+    }
+    pulsarBusqueda(nombre) {
+        this.modelo.obtenerRegistro2(nombre);
+    }
+    pulsarModificar(dato) {
+        this.ocultarVistas();
+        this.vistaModificar.mostrar(true);
+        this.vistaModificar.rellenar(dato);
+    }
+    getModelo() {
+        return this.modelo;
+    }
 }
-const app = new Controlador()
+new Controlador();
+//# sourceMappingURL=app.js.map
